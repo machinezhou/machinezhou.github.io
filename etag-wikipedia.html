@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>HTTP ETag</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Machinezhou.GitHub.io</h1>
+          <h2></h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/machinezhou" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h3>
+<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>HTTP ETag. From Wikipedia, the free encyclopedia.</h3>
+
+<p>The ETag or entity tag is part of HTTP, the protocol for the World Wide Web. It is one of several mechanisms that HTTP provides for web cache validation, which allows a client to make conditional requests. This allows caches to be more efficient, and saves bandwidth, as a web server does not need to send a full response if the content has not changed. ETags can also be used for optimistic concurrency control,[1] as a way to help prevent simultaneous updates of a resource from overwriting each other.
+
+An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL. If the resource representation at that URL ever changes, a new and different ETag is assigned. Used in this manner ETags are similar to fingerprints, and they can be quickly compared to determine whether two representations of a resource are the same.
+</p>
+
+<h3>
+<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deployment risks</h3>
+
+<p>The use of ETags in the HTTP header is optional (not mandatory as with some other fields of the HTTP 1.1 header). The method by which ETags are generated has never been specified in the HTTP specification.
+
+Common methods of ETag generation include using a collision-resistant hash function of the resource's content, a hash of the last modification timestamp, or even just a revision number.
+
+In order to avoid the use of stale cache data, methods used to generate ETags should guarantee (as much as is practical) that each ETag is unique. However, an ETag-generation function could be judged to be "usable" if it can be proven (mathematically) that duplication of ETags would be "acceptably rare", even if it could or would occur.
+
+Some earlier checksum functions, such as CRC32 and CRC64, are known to suffer from this hash collision problem. Because of this they are not good candidates for use in ETag generation.
+</p>
+
+
+
+
+
+<h3>
+<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Strong and weak validation</h3>
+
+<p>
+The ETag mechanism supports both strong validation and weak validation. They are distinguished by the presence of an initial "W/" in the ETag identifier, as:<br/>
+<code>
+"123456789"    – A strong ETag validator
+W/"123456789"  – A weak ETag validator
+</code> 
+A strongly validating ETag match indicates that the content of the two resource representations is byte-for-byte identical and that all other entity fields (such as Content-Language) are also unchanged. Strong ETags permit the caching and reassembly of partial responses, as with byte-range requests.
+A weakly validating ETag match only indicates that the two representations are semantically equivalent, meaning that for practical purposes they are interchangeable and that cached copies can be used. However the resource representations are not necessarily byte-for-byte identical, and thus weak ETags are not suitable for byte-range requests. Weak ETags may be useful for cases in which strong ETags are impractical for a web server to generate, such as with dynamically-generated content.
+</p>
+
+
+
+<h3>
+<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Typical usage</h3>
+<p>
+In typical usage, when a URL is retrieved the web server will return the resource's current representation along with its corresponding ETag value, which is placed in an HTTP response header "ETag" field:
+<code>ETag: "686897696a7c876b7e"
+</code> 
+The client may then decide to cache the representation, along with its ETag. Later, if the client wants to retrieve the same URL again, it will send its previously saved copy of the ETag along with the request in a "If-None-Match" field.
+<code>If-None-Match: "686897696a7c876b7e"
+</code> 
+On this subsequent request, the server may now compare the client's ETag with the ETag for the current version of the resource. If the ETag values match, meaning that the resource has not changed, then the server may send back a very short response with a HTTP 304 Not Modified status. The 304 status tells the client that its cached version is still good and that it should use that.
+However, if the ETag values do not match, meaning the resource has likely changed, then a full response including the resource's content is returned, just as if ETags were not being used. In this case the client may decide to replace its previously cached version with the newly returned representation of the resource and the new ETag.
+ETag values can be used in web page monitoring systems. Efficient web page monitoring is hindered by the fact that most websites do not set the ETag headers for web pages. When a web monitor has no hints whether web content has been changed all content has to be retrieved, and analyzed, using computing resources for both the publisher and subscriber.
+</p>
+
+
+
+
+
+<h3>
+<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tracking using ETags</h3>
+<p>ETags can be used to track unique users,[2] as HTTP cookies are increasingly being deleted by privacy-aware users. In July 2011, Ashkan Soltani and a team of researchers at UC Berkeley reported that a number of websites, including Hulu.com, were using ETags for tracking purposes.[3] Hulu and KISSmetrics have both ceased "respawning" as of 29 July 2011,[4] as KISSmetrics and over 20 of its clients are facing a class-action lawsuit over the use of "undeletable" tracking cookies partially involving the use of ETags.[5]
+
+Because ETags are cached by the browser, and returned with subsequent requests for the same resource, a tracking server can simply repeat any ETag received from the browser to ensure an assigned ETag persists indefinitely (in a similar way to persistent cookies). Additional caching headers can also enhance the preservation of ETag data.[6]
+
+ETags may be flushable by clearing the browser cache (implementations vary).
+</p>
+
+
+
+<h3>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>You can <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/#mentioning-users-and-teams" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+<h3>
+<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+        </section>
+
+        <footer>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
